@@ -50,7 +50,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         // Verifica os erros de entrada antes de inserir no banco de dados
     if(empty($nome_err) && empty($endereco_err) && empty($email_err) && empty($senha_err) && empty($rep_senha_err)){
         // Prepara uma instrução de inserção
-        $md5_senha = password_hash(md5($senha),PASSWORD_DEFAULT);
+        $md5_senha = md5($senha);
         $sql = "INSERT INTO usuarios(nome_completo, endereco, email, senha) VALUES ( '$nome','$endereco','$email', '$md5_senha' )";
          
         if($stmt = mysqli_prepare($link, $sql)){

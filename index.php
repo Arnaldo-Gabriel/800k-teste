@@ -1,8 +1,47 @@
 <?php
 //Inclui arquivo de configuração
 require_once "config.php";
-var_dump($_POST);
-// exit();
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    var_dump($_SERVER);
+    // session_start();
+
+
+    $input_senha = trim(isset($_POST["senha"])?$_POST["senha"]:'');
+    $input_email = trim(isset($_POST["email"])?$_POST["email"]:'');
+    $email_error = "";
+    $senha_error = "";
+
+    if(empty($input_email)){
+        $email_error = "E-mail é obrigatório";
+    }
+    if(!filter_var($input_email, FILTER_VALIDATE_EMAIL)){
+        $email_error = "E-mail inválido";
+    }
+    if(empty($input_senha)){
+        $senha_error = "Senha é obrigatória";
+    }
+    $senha_md5 = md5($input_senha);
+    $sql = "SELECT * FROM usuarios WHERE email = '$input_email' AND senha = '$senha_md5'";
+
+    if($stmt = mysqli_prepare($link, $sql)){
+        if(mysqli_stmt_execute($stmt)){
+            $result = mysqli_stmt_get_result($stmt);
+            if(mysqli_num_rows($result) == 1){
+                $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+                var_dump($row["email"]);
+                // $_SESSION['email'] = $row["email"];
+
+                header("location: list.php");                
+            }else{
+                $senha_error = "Usuário/senha incorreto(s)";
+                header("location: index.php");
+                exit();
+            }
+        }
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -204,12 +243,14 @@ var_dump($_POST);
     <div class="container">
         <div class="screen">
             <div class="screen__content">
-                <form class="login" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                <form class="login" action="index.php" method="POST">
                     <div class="login__field">
-                        <input type="text" class="login__input" name="email" placeholder="Email">
+                        <input type="text" class="login__input <?php echo (!empty($email_error)) ? 'is-invalid' : ''; ?>" name="email"   placeholder="Email">
+                        <span class="invalid-feedback"><?php echo $email_error;?></span>
                     </div>
                     <div class="login__field">
-                        <input type="password" name="senha" class="login__input" placeholder="Senha">
+                        <input type="password" name="senha" class="login__input <?php echo (!empty($senha_error)) ? 'is-invalid' : ''; ?>" placeholder="Senha">
+                        <span class="invalid-feedback"><?php echo $senha_error;?></span>
                     </div>
                     <button class="button login__submit" type="submit">
                         Login

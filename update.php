@@ -50,7 +50,7 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     
     if(empty($nome_err) && empty($endereco_err) && empty($email_err) && empty($senha_err) && empty($rep_senha_err)){
         
-        $md5_senha = password_hash(md5($senha),PASSWORD_DEFAULT);
+        $md5_senha = md5($senha);
         
         $sql = "UPDATE usuarios SET nome_completo='$input_nome', endereco='$input_endereco', email='$input_email', senha='$md5_senha'  WHERE id=$id";
          
