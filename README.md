@@ -11,5 +11,5 @@
 -Execute os scripts SQL (sql.sql)
 <br>
 -Abra o servidor local (http://localhost/800k-teste/index.php) <br>
--Já existe um usuário padrão (senha=admin, usuário=admin)
+-Já existe um usuário padrão (senha=admin, usuário=admin@admin.com)
 
