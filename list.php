@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -40,7 +41,7 @@
                     <?php
                     // Include config file
                     require_once "config.php";
-                    if (isset($_SESSION['email'])) {
+
                         $sql = "SELECT * FROM usuarios";
                         if ($result = mysqli_query($link, $sql)) {
                             if (mysqli_num_rows($result) > 0) {
@@ -78,10 +79,7 @@
                         } else {
                             echo "Oops! Something went wrong. Please try again later.";
                         }
-                    }else{
-                        header("Location: index.php");
-                        exit();
-                    }
+
 
                     // Close connection
                     mysqli_close($link);
